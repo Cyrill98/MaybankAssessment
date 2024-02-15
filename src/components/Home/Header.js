@@ -1,6 +1,8 @@
 import { View, Text, Image, StyleSheet, TextInput } from 'react-native'
-import React, { useRef } from 'react'
+import React, { useRef, useCallback } from 'react'
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import { useDispatch,useSelector } from 'react-redux';
+import * as MyLocationAction from '../../store/action/locationAction';
 
 export default function Header () {
     const placesRef = useRef();
@@ -8,15 +10,36 @@ export default function Header () {
     const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
 const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
 
+    const dispatch = useDispatch()
+    const myLocation = useSelector((state) => console.log('state noew', state))
 
+    const loadAutocomplete = useCallback(async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+
+        const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync({})
+
+        dispatch(AutocompleteAction.fetchAutocomplete({
+            latitude,
+            longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+        }))
+
+        dispatch(MyLocationAction.fetchMyLocation({
+            latitude,
+            longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+        }))
+
+    },[dispatch])
   return (
     <View style={{ flexDirection: 'row'}}>
       <Image
         source={require('../../../assets/maybank.png')}
         style={styles.logo}
       />
-      <View style={{ width: '70%', marginLeft: 10, zIndex: 1, flexDirection: 'column' }}>
-        <Text style={{ fontSize: 25, color: 'black'}}>maybank Assesment</Text>
+      <View style={{ width: '70%', marginLeft: 10, zIndex: 1 }}>
       <GooglePlacesAutocomplete
       placeholder='Search'
       minLength={2} // minimum length of text to search
@@ -26,7 +49,15 @@ const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818
       fetchDetails={true}
       renderDescription={row => row.description} // custom description render
       onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-        console.log(data, details);
+        const result = {
+            latitude:details.geometry.location.lat,
+            longitude:details.geometry.location.lng,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+        }
+        dispatch(MapMarkerAction.fetchMapMaker(result))
+        setSearch(details.geometry.location.lat)
+        dispatch(AutocompleteAction.fetchAutocomplete(result))
       }}
       ref = {placesRef}
       getDefaultValue={() => ''}

@@ -1,4 +1,4 @@
-import { SHOW_MY_LOCATION } from "./locationAction";
+import { SHOW_MY_LOCATION } from "../action/locationAction";
 
 const initialState = {
     myLocation:[]

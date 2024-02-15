@@ -30,11 +30,11 @@ export default function App() {
 
   return (
     <Provider store={rootStore}>
-      <CurrentLocation.Provider value={{ location, setLocation }}>
+      {/* <CurrentLocation.Provider value={{ location, setLocation }}> */}
       <NavigationContainer>
         <TabNavigation/>
       </NavigationContainer>
-      </CurrentLocation.Provider>
+      {/* </CurrentLocation.Provider> */}
     </Provider>
   )
 }

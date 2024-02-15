@@ -1,6 +1,8 @@
 // import { AppLoading, Font } from 'expo';
 import { useState, useRef } from 'react';
 import { SafeAreaView, View, Text, Image } from 'react-native';
+import { useDispatch,useSelector } from 'react-redux';
+
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 // import {apiKey} from './config'; // your google cloud api key
 
@@ -11,6 +13,14 @@ const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818
 
 export default function App () {
   const placesRef = useRef();
+
+  const dispatch = useDispatch()
+
+
+  const myLocation = useSelector((state) => console.log(state.location.myLocation))
+  const mapMarker = useSelector((state) => console.log(state.marker.mapMarker))
+  const coordinate = useSelector((state) => console.log(state.autoComplete.autoComplete))
+
 
   const getAddress = () => {
     console.log('current places -->', placesRef.current?.getAddressText());
@@ -28,7 +38,16 @@ export default function App () {
       fetchDetails={true}
       renderDescription={row => row.description} // custom description render
       onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-        console.log(data, details);
+        const result = {
+          latitude:details.geometry.location.lat,
+          longitude:details.geometry.location.lng,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+      }
+      dispatch(MapMarkerAction.fetchMapMaker(result))
+      setSearch(details.geometry.location.lat)
+      dispatch(AutocompleteAction.fetchAutocomplete(result))
+
       }}
       ref = {placesRef}
       getDefaultValue={() => ''}

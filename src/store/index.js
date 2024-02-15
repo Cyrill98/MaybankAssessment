@@ -1,9 +1,14 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { thunk } from 'redux-thunk'
-import MyLocationReducer from './locationReducer'
+import MyLocationReducer from './reducer/locationReducer';
+import mapMarkerReducer from './reducer/markerReducer';
+import AutocompleteReducer from './reducer/autoCompleteReducer';
 
 const rootReducer = combineReducers({
-    location: MyLocationReducer
+    location: MyLocationReducer,    
+    marker: mapMarkerReducer,
+    autoComplete: AutocompleteReducer
+
 })
 
-export const rootStore = createStore(rootReducer, applyMiddleware(thunk))
+export default rootStore = createStore(rootReducer, applyMiddleware(thunk))

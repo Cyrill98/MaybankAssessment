@@ -1,6 +1,8 @@
 import { View, Text, Dimensions } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { useDispatch,useSelector } from 'react-redux';
+
 import { CurrentLocation } from "../contexts/CurrentUserLocation";
 // import { UserLocationContext } from "../../Context/UserLocationContext";
 // import PlaceMarker from "./PlaceMarker";
@@ -8,21 +10,29 @@ import { CurrentLocation } from "../contexts/CurrentUserLocation";
 
 export default function GoogleMapView({placeList}) {
   const [mapRegion, setmapRegion] = useState([]);
-  const { location, setLocation } = useContext(CurrentLocation);
 
-  console.log('location curr ->', location);
 
-  useEffect(()=>{
-    if(location)
-    {
-        setmapRegion({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.0422,
-            longitudeDelta: 0.0421,
-        })
-    }
-  },[location])
+  const dispatch = useDispatch()
+
+  const myLocation = useSelector((state) => console.log(state.location.myLocation))
+  const mapMarker = useSelector((state) => console.log(state.marker.mapMarker))
+  const coordinate = useSelector((state) => console.log(state.autoComplete.autoComplete))
+
+//   const { location, setLocation } = useContext(CurrentLocation);
+
+//   console.log('location curr ->', location);
+
+//   useEffect(()=>{
+//     if(location)
+//     {
+//         setmapRegion({
+//             latitude: location.coords.latitude,
+//             longitude: location.coords.longitude,
+//             latitudeDelta: 0.0422,
+//             longitudeDelta: 0.0421,
+//         })
+//     }
+//   },[location])
  
 
   return (
@@ -63,13 +73,6 @@ export default function GoogleMapView({placeList}) {
             showsUserLocation={true}
             region={mapRegion}
             style={{ borderTopEndRadius: 20, marginTop: 7, width: Dimensions.get('screen').width, height: Dimensions.get('screen').height * .72  }}>
-                <Marker 
-            title="You" 
-            coordinate={mapRegion}
-             />
-            <Marker title="Your location"
-                coordinate={mapRegion}
-            />
         </MapView>
 
             
