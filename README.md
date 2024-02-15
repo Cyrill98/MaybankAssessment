@@ -3,6 +3,9 @@
 <h2>TechStack used</h2>
 <ul>
   <li>React Naitve (Expo)</li>
+  <li>React Redux</li>
+  <li>Redux Thunk</li>
+  <li>Google Places Autocomplete</li>
 </ul>
 
 
