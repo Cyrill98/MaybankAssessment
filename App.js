@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import TabNavigation from './src/navigations/TabNavigation'
+import * as Location from 'expo-location';
+import { CurrentLocation } from './src/contexts/CurrentUserLocation';
+import rootStore from './src/store';
+import { Provider } from 'react-redux';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+
+  return (
+    <Provider store={rootStore}>
+      <CurrentLocation.Provider value={{ location, setLocation }}>
+      <NavigationContainer>
+        <TabNavigation/>
+      </NavigationContainer>
+      </CurrentLocation.Provider>
+    </Provider>
+  )
+}
