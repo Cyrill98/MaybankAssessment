@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
-const apiKey = "AIzaSyA8EZU-F95hwHkKnyRikLSZ-hxHyQCRCzo";
 const homePlace = {
   description: "Home",
   geometry: { location: { lat: 48.8152937, lng: 2.4597668 } },
@@ -56,7 +55,7 @@ export default function App() {
         ref={placesRef}
         getDefaultValue={() => ""}
         query={{
-          key: apiKey,
+          key: process.env.GOOGLE_MAPS_API_KEYS,
           language: "en", // language of the results
           types: "(cities)", // default: 'geocode'
         }}

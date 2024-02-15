@@ -1,18 +1,14 @@
-import { View, Text, Image, StyleSheet, TextInput } from 'react-native'
-import React, { useRef, useCallback } from 'react'
+import { View, Text, Image, StyleSheet } from 'react-native'
+import React, { useRef, useCallback, useEffect } from 'react'
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import { useDispatch,useSelector } from 'react-redux';
 import * as MyLocationAction from '../../store/action/locationAction';
 
 export default function Header () {
     const placesRef = useRef();
-    const apiKey = "AIzaSyA8EZU-F95hwHkKnyRikLSZ-hxHyQCRCzo";
-    const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
-const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
-
     const dispatch = useDispatch()
     const myLocation = useSelector((state) => console.log('state noew', state))
-
+    
     const loadAutocomplete = useCallback(async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -63,7 +59,7 @@ const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818
       getDefaultValue={() => ''}
       query={{
         // available options: https://developers.google.com/places/web-service/autocomplete
-        key: apiKey,
+        key: process.env.GOOGLE_MAPS_API_KEYS,
         language: 'en', // language of the results
         types: '(cities)' // default: 'geocode'
       }}
