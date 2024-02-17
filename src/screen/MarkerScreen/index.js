@@ -55,7 +55,7 @@ export default function App() {
         ref={placesRef}
         getDefaultValue={() => ""}
         query={{
-          key: process.env.GOOGLE_MAPS_API_KEYS,
+          key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEYS,
           language: "en", // language of the results
           types: "(cities)", // default: 'geocode'
         }}

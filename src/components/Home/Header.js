@@ -9,6 +9,12 @@ export default function Header () {
     const dispatch = useDispatch()
     const myLocation = useSelector((state) => console.log('state noew', state))
     
+useEffect(() => {
+  console.log('env --->', global.env)
+  console.log('env 2--->', process.env)
+  console.log('env 2--->', process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEYS)
+},[]);
+
     const loadAutocomplete = useCallback(async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -29,6 +35,7 @@ export default function Header () {
         }))
 
     },[dispatch])
+
   return (
     <View style={{ flexDirection: 'row'}}>
       <Image
@@ -59,7 +66,7 @@ export default function Header () {
       getDefaultValue={() => ''}
       query={{
         // available options: https://developers.google.com/places/web-service/autocomplete
-        key: process.env.GOOGLE_MAPS_API_KEYS,
+        key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEYS,
         language: 'en', // language of the results
         types: '(cities)' // default: 'geocode'
       }}
