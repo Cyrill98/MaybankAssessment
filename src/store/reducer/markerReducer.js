@@ -5,6 +5,8 @@ const initialState = {
 }
 
 const mapMarkerReducer = (state = initialState,action) => {
+    // console.log('state mapmarker -->', state)
+    // console.log('state mapmarker ii-->', action.data)
     switch(action.type){
         case SHOW_MAPMARKER:
         return {
