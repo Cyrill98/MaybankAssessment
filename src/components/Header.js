@@ -1,37 +1,24 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useRef, useCallback, useState, useEffect } from 'react'
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import { useDispatch,useSelector } from 'react-redux';
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { useDispatch } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 
-import * as MyLocationAction from '../../store/action/locationAction';
-import * as MapMarkerAction from '../../store/action/markerAction'
-import * as AutocompleteAction from '../../store/action/autoCompleteAction'
+import * as MyLocationAction from '../store/action/locationAction';
+import * as MapMarkerAction from '../store/action/markerAction'
+import * as AutocompleteAction from '../store/action/autoCompleteAction'
 import * as Location from 'expo-location';
 
 export default function Header () {
-  const [search,setSearch] = useState('')
+  const [search, setSearch] = useState('')
 
     const placesRef = useRef();
     const dispatch = useDispatch()
-    const myLocation = useSelector((state) => console.log('state noew', state))
-    const mapMarker = useSelector((state) => console.log('mapMarker state 2 -->',state.marker.mapMarker));
-    const coordinate = useSelector((state) => state.autoComplete.autoComplete)
 
     const loadAutocomplete = useCallback(async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
 
         const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync({})
-
-        console.log('longitudeeee', longitude)
-        console.log('longitudeeee', latitude)
-        dispatch(AutocompleteAction.fetchAutocomplete({
-            latitude,
-            longitude,
-            latitudeDelta: 0.05,
-            longitudeDelta: 0.05,
-        }))
 
         dispatch(MyLocationAction.fetchMyLocation({
             latitude,
@@ -54,7 +41,7 @@ export default function Header () {
   return (
     <View style={{ flexDirection: 'row'}}>
       <Image
-        source={require('../../../assets/maybank.png')}
+        source={require('../../assets/maybank.png')}
         style={styles.logo}
       />
       <View style={{ width: '70%', marginLeft: 10, zIndex: 1, flexDirection: 'column' }}>
@@ -67,7 +54,6 @@ export default function Header () {
       fetchDetails={true}
       renderDescription={row => row.description} // custom description render
       onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-        console.log('details complete -->', details);
         const result = {
             latitude:details.geometry.location.lat,
             longitude:details.geometry.location.lng,
@@ -77,7 +63,7 @@ export default function Header () {
 
         const searchPlaces = {
           name : details.address_components[0].long_name,
-          country: details.address_components[3].long_name
+          country: details.address_components[2].long_name
         }
         console.log('searchplaces -->', searchPlaces);
         dispatch(MapMarkerAction.fetchMapMaker(result))
@@ -104,9 +90,7 @@ export default function Header () {
       currentLocationLabel="Current location"
       nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
       filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-    //   predefinedPlaces={[homePlace, workPlace]}
       debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-      // renderLeftButton={()  => <Image source={require('path/custom/left-icon')} />}
       renderRightButton={() => 
       <TouchableOpacity
         style={{ alignItems: 'center', justifyContent: 'center', marginLeft: 5}}

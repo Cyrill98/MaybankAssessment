@@ -1,12 +1,13 @@
-import { View, Text, Dimensions } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react'
-import Header from '../../components/Home/Header'
+import Header from '../../components/Header'
 import GoogleMapView from '../../components/GoogleMapView'
+import styles from './styles'
 
 export default function Home() {
   return (
-    <View style={{ paddingTop: 20, backgroundColor: 'orange', height: Dimensions.get('screen').height }}>
-      <Text style={{ textAlign: 'center', marginVertical: 8, fontSize: 25, fontWeight: 'bold'}}>Maybank</Text>
+    <View style={styles.mainContainer}>
+      <Text style={styles.title}>Maybank</Text>
       <Header/>
       <GoogleMapView/>
     </View>

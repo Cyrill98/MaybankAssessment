@@ -5,6 +5,7 @@ const initialState = {
 }
 
 const AutocompleteReducer = (state = initialState,action) => {
+    console.log('action dataaa -->', action);
     switch(action.type){
         case SHOW_AUTOCOMPLETE:
             return {

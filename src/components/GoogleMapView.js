@@ -1,13 +1,9 @@
 import { View, Text, Dimensions } from "react-native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { useDispatch,useSelector } from 'react-redux';
-import { CurrentLocation } from "../contexts/CurrentUserLocation";
+import { useSelector } from 'react-redux';
 
-export default function GoogleMapView({placeList}) {
-  const mapRef = useRef(null);
-  const dispatch = useDispatch()
-
+export default function GoogleMapView() {
   const myLocation = useSelector((state) => state.location.myLocation)
   const mapMarker = useSelector((state) => state.marker.mapMarker)
   const coordinate = useSelector((state) => state.autoComplete.autocomplete)
@@ -17,8 +13,12 @@ export default function GoogleMapView({placeList}) {
       <View style={{ marginLeft: 15}}>
         <Text style={{fontSize: 16, fontWeight: 'bold' }}>Search history</Text>
         {
-          coordinate.country ?
-          <Text>{coordinate?.name}, {coordinate?.country}</Text>
+          coordinate ?
+          coordinate.map(res => {
+            return (
+            <Text>{res?.name}, {res?.country}</Text>
+            );
+          })
           : <Text style={{ marginLeft: 5 }}>No history</Text>
         }
       </View>
